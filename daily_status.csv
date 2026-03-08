@@ -1,6 +1,14 @@
 Name,Date,Work Done,Blockers,Plan
 darika,2026-02-09,Worked on Flask backend.,Blocked due to data issue.,Tomorrow I will improve UI.
-S. Abishek Kumar,2026-03-08,"Worked on login module","API integration issue",Complete dashboard tomorrow
-S. Abishek Kumar,2026-03-08,"Worked on login module","API integration issue",Complete dashboard tomorrow
-sanjay,2026-03-08,"front end","backend",sql
-saravan,2026-03-08,"frontend","backend",sql 
+S. Abishek Kumar,2026-03-08,"Worked on login module
+","API integration issue
+",Complete dashboard tomorrow
+S. Abishek Kumar,2026-03-08,"Worked on login module
+","API integration issue
+",Complete dashboard tomorrow
+sanjay,2026-03-08,"front end
+","backend
+",sql
+saravan,2026-03-08,"frontend
+","backend
+",sql 
