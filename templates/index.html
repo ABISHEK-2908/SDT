@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<meta charset="UTF-8">
+<title>Status Drafter Tool</title>
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Segoe UI;
+}
+
+body{
+height:100vh;
+display:flex;
+justify-content:center;
+align-items:center;
+background:linear-gradient(135deg,#4facfe,#00f2fe);
+}
+
+/* Card */
+
+.container{
+width:450px;
+padding:30px;
+background:rgba(255,255,255,0.15);
+backdrop-filter:blur(10px);
+border-radius:15px;
+box-shadow:0 10px 25px rgba(0,0,0,0.2);
+color:white;
+transition:0.3s;
+}
+
+.container:hover{
+transform:scale(1.02);
+}
+
+/* Title */
+
+h2{
+text-align:center;
+margin-bottom:25px;
+}
+
+/* Inputs */
+
+label{
+font-size:14px;
+}
+
+input,textarea{
+
+width:100%;
+padding:12px;
+margin-top:6px;
+margin-bottom:15px;
+
+border:none;
+border-radius:8px;
+
+outline:none;
+
+font-size:14px;
+
+}
+
+/* Textarea */
+
+textarea{
+resize:none;
+height:90px;
+}
+
+/* Button */
+
+button{
+
+width:100%;
+padding:12px;
+
+background:#007bff;
+color:white;
+
+border:none;
+border-radius:8px;
+
+font-size:16px;
+font-weight:bold;
+
+cursor:pointer;
+
+transition:0.3s;
+}
+
+button:hover{
+
+background:#0056b3;
+transform:translateY(-2px);
+
+}
+
+/* Report */
+
+.report{
+
+margin-top:20px;
+padding:15px;
+
+background:rgba(255,255,255,0.2);
+
+border-radius:10px;
+
+animation:fadeIn 0.5s ease;
+
+}
+
+@keyframes fadeIn{
+
+from{
+opacity:0;
+transform:translateY(10px);
+}
+
+to{
+opacity:1;
+transform:translateY(0);
+}
+
+}
+
+/* Character counter */
+
+.counter{
+font-size:12px;
+text-align:right;
+opacity:0.8;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+<h2>Status Drafter Tool</h2>
+
+<form method="POST">
+
+<label>Name</label>
+<input type="text" name="name" required>
+
+<label>Date</label>
+<input type="date" name="date" required>
+
+<label>Status (3 lines)</label>
+
+<textarea id="statusBox" name="status"
+placeholder="Line 1: Work Done
+Line 2: Blockers
+Line 3: Tomorrow Plan" required></textarea>
+
+<div class="counter" id="charCount">0 characters</div>
+
+<button type="submit">Generate Report</button>
+
+</form>
+
+{% if report %}
+
+<div class="report">
+
+<h3>Generated Report</h3>
+
+<p><b>Name:</b> {{report.name}}</p>
+
+<p><b>Date:</b> {{report.date}}</p>
+
+<p><b>Work Done:</b> {{report.work_done}}</p>
+
+<p><b>Blockers:</b> {{report.blockers}}</p>
+
+<p><b>Plan:</b> {{report.plan}}</p>
+
+</div>
+
+{% endif %}
+
+</div>
+
+<script>
+
+/* Character Counter */
+
+const textarea = document.getElementById("statusBox");
+const counter = document.getElementById("charCount");
+
+textarea.addEventListener("input",function(){
+
+counter.textContent = textarea.value.length + " characters";
+
+});
+
+/* Auto Expand Textarea */
+
+textarea.addEventListener("input",function(){
+
+this.style.height="auto";
+this.style.height=this.scrollHeight+"px";
+
+});
+
+</script>
+
+</body>
+</html>
