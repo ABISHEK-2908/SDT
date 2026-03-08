@@ -32,14 +32,14 @@ def load_reports_from_excel():
     ws = wb.active
     reports = []
     for row in ws.iter_rows(min_row=2, values_only=True):  # Skip header
-        if row[0]:  # If name is not empty
+        if row and len(row) >= 5:  # Ensure at least 5 columns
             reports.append({
-                "name": row[0],
-                "date": row[1],
-                "project": row[2],
-                "work_done": row[3],
-                "blockers": row[4],
-                "plan": row[5]
+                "name": row[0] or "",
+                "date": row[1] or "",
+                "project": row[2] if len(row) > 5 else "",  # Project column if exists
+                "work_done": row[2] if len(row) <= 5 else row[3] or "",
+                "blockers": row[3] if len(row) <= 5 else row[4] or "",
+                "plan": row[4] if len(row) <= 5 else row[5] or ""
             })
     return reports
 
@@ -91,7 +91,7 @@ def download():
 
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(debug=True, use_reloader=False)
 
 
 if __name__ == "__main__":

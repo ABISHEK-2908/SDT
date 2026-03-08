@@ -1,212 +1,334 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-
 <meta charset="UTF-8">
 <title>Status Drafter Tool</title>
-
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 <style>
-
 *{
 margin:0;
 padding:0;
 box-sizing:border-box;
-font-family:Segoe UI;
+font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 body{
-height:100vh;
+min-height:100vh;
+background: linear-gradient(45deg, #667eea 0%, #764ba2 100%);
 display:flex;
 justify-content:center;
 align-items:center;
-background:linear-gradient(135deg,#4facfe,#00f2fe);
+padding:20px;
+position:relative;
+overflow-x:hidden;
+}
+
+body::before{
+content:'';
+position:absolute;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="2" fill="rgba(255,255,255,0.1)"/></svg>') repeat;
+animation: float 20s infinite linear;
+}
+
+@keyframes float {
+0% { transform: translateY(0px); }
+100% { transform: translateY(-100px); }
 }
 
 /* Card */
-
 .container{
-width:450px;
-padding:30px;
-background:rgba(255,255,255,0.15);
-backdrop-filter:blur(10px);
-border-radius:15px;
-box-shadow:0 10px 25px rgba(0,0,0,0.2);
-color:white;
-transition:0.3s;
+width:500px;
+padding:40px;
+background:rgba(255,255,255,0.95);
+backdrop-filter:blur(20px);
+border-radius:20px;
+box-shadow:0 20px 40px rgba(0,0,0,0.1);
+color:#333;
+position:relative;
+z-index:1;
+transition:transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .container:hover{
-transform:scale(1.02);
+transform:translateY(-5px);
+box-shadow:0 30px 60px rgba(0,0,0,0.15);
 }
 
 /* Title */
-
 h2{
 text-align:center;
+margin-bottom:30px;
+color:#4a5568;
+font-weight:700;
+position:relative;
+}
+
+h2::after{
+content:'';
+display:block;
+width:60px;
+height:4px;
+background:linear-gradient(90deg, #667eea, #764ba2);
+margin:10px auto;
+border-radius:2px;
+}
+
+/* Form Group */
+.form-group{
 margin-bottom:25px;
+position:relative;
+}
+
+.form-group i{
+position:absolute;
+left:15px;
+top:50%;
+transform:translateY(-50%);
+color:#667eea;
+font-size:18px;
 }
 
 /* Inputs */
-
-label{
-font-size:14px;
+input,textarea{
+width:100%;
+padding:15px 15px 15px 50px;
+border:2px solid #e2e8f0;
+border-radius:12px;
+outline:none;
+font-size:16px;
+transition:border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
-input,textarea{
-
-width:100%;
-padding:12px;
-margin-top:6px;
-margin-bottom:15px;
-
-border:none;
-border-radius:8px;
-
-outline:none;
-
-font-size:14px;
-
+input:focus,textarea:focus{
+border-color:#667eea;
+box-shadow:0 0 0 3px rgba(102, 126, 234, 0.1);
 }
 
 /* Textarea */
-
 textarea{
 resize:none;
-height:90px;
+height:120px;
 }
 
-/* Button */
-
-button{
-
-width:100%;
-padding:12px;
-
-background:#007bff;
-color:white;
-
-border:none;
-border-radius:8px;
-
-font-size:16px;
-font-weight:bold;
-
-cursor:pointer;
-
-transition:0.3s;
-}
-
-button:hover{
-
-background:#0056b3;
-transform:translateY(-2px);
-
-}
-
-/* Clear Button */
-.clear-btn {
-background:#dc3545;
+/* Progress Bar for Status */
+.progress-container{
 margin-top:10px;
 }
 
-.clear-btn:hover {
-background:#c82333;
+.progress-bar{
+width:100%;
+height:8px;
+background:#e2e8f0;
+border-radius:4px;
+overflow:hidden;
+}
+
+.progress-fill{
+height:100%;
+background:linear-gradient(90deg, #667eea, #764ba2);
+width:0%;
+transition:width 0.3s ease;
+}
+
+/* Buttons */
+.btn-container{
+display:flex;
+gap:15px;
+margin-top:30px;
+}
+
+button, .btn-link{
+flex:1;
+padding:15px;
+border:none;
+border-radius:12px;
+font-size:16px;
+font-weight:600;
+cursor:pointer;
+transition:all 0.3s ease;
+text-decoration:none;
+text-align:center;
+display:inline-block;
+}
+
+button[type="submit"]{
+background:linear-gradient(135deg, #667eea, #764ba2);
+color:white;
+}
+
+button[type="submit"]:hover{
+transform:translateY(-2px);
+box-shadow:0 10px 20px rgba(102, 126, 234, 0.3);
+}
+
+.clear-btn{
+background:#e53e3e;
+color:white;
+}
+
+.clear-btn:hover{
+background:#c53030;
+transform:translateY(-2px);
+}
+
+.btn-link{
+background:#38a169;
+color:white;
+}
+
+.btn-link:hover{
+background:#2f855a;
+transform:translateY(-2px);
 }
 
 /* Report */
-
 .report{
-
-margin-top:20px;
-padding:15px;
-
-background:rgba(255,255,255,0.2);
-
-border-radius:10px;
-
-animation:fadeIn 0.5s ease;
-
+margin-top:30px;
+padding:25px;
+background:linear-gradient(135deg, #f7fafc, #edf2f7);
+border-radius:15px;
+border-left:5px solid #667eea;
+animation:slideIn 0.5s ease;
+position:relative;
 }
 
-@keyframes fadeIn{
+.report::before{
+content:'✓';
+position:absolute;
+top:20px;
+right:20px;
+font-size:24px;
+color:#38a169;
+}
 
+@keyframes slideIn{
 from{
 opacity:0;
-transform:translateY(10px);
+transform:translateX(-20px);
 }
-
 to{
 opacity:1;
-transform:translateY(0);
+transform:translateX(0);
 }
-
-}
-
-/* Character counter */
-
-.counter{
-font-size:12px;
-text-align:right;
-opacity:0.8;
 }
 
 /* Live Preview */
-.preview {
-margin-top:20px;
-padding:15px;
-background:rgba(255,255,255,0.1);
-border-radius:10px;
+.preview{
+margin-top:30px;
+padding:25px;
+background:rgba(255,255,255,0.9);
+border-radius:15px;
+border:2px dashed #667eea;
 display:none;
+animation:fadeIn 0.5s ease;
 }
 
-.preview h3 {
-margin-bottom:10px;
+.preview h3{
+margin-bottom:15px;
+color:#4a5568;
+font-weight:600;
 }
 
-.preview p {
-margin-bottom:5px;
+.preview p{
+margin-bottom:8px;
+font-size:14px;
 }
 
+/* Loading Spinner */
+.loading{
+display:none;
+position:absolute;
+top:50%;
+left:50%;
+transform:translate(-50%, -50%);
+width:40px;
+height:40px;
+border:4px solid #f3f3f3;
+border-top:4px solid #667eea;
+border-radius:50%;
+animation:spin 1s linear infinite;
+}
+
+@keyframes spin{
+0%{transform:translate(-50%, -50%) rotate(0deg);}
+100%{transform:translate(-50%, -50%) rotate(360deg);}
+}
+
+@keyframes fadeIn{
+from{opacity:0; transform:translateY(10px);}
+to{opacity:1; transform:translateY(0);}
+}
+
+/* Responsive */
+@media (max-width:600px){
+.container{
+width:95%;
+padding:30px 20px;
+}
+.btn-container{
+flex-direction:column;
+}
+}
 </style>
-
 </head>
 
 <body>
 
 <div class="container">
 
-<h2>Status Drafter Tool</h2>
+<h2><i class="fas fa-clipboard-list"></i> Status Drafter Tool</h2>
 
 <form method="POST" id="statusForm">
 
+<div class="form-group">
+<i class="fas fa-user"></i>
 <label>Name</label>
 <input type="text" name="name" id="nameInput" required>
+</div>
 
+<div class="form-group">
+<i class="fas fa-calendar"></i>
 <label>Date</label>
 <input type="date" name="date" id="dateInput" required>
+</div>
 
+<div class="form-group">
+<i class="fas fa-project-diagram"></i>
 <label>Project Name</label>
 <input type="text" name="project" id="projectInput" required>
+</div>
 
+<div class="form-group">
+<i class="fas fa-tasks"></i>
 <label>Status (3 lines)</label>
-
 <textarea id="statusBox" name="status"
 placeholder="Line 1: Work Done
 Line 2: Blockers
 Line 3: Tomorrow Plan" required></textarea>
+<div class="progress-container">
+<div class="progress-bar">
+<div class="progress-fill" id="progressFill"></div>
+</div>
+</div>
+</div>
 
-<div class="counter" id="charCount">0 characters</div>
-
-<button type="submit">Generate Report</button>
-<button type="button" class="clear-btn" id="clearBtn">Clear Form</button>
-
-<a href="/reports" style="display: inline-block; padding: 12px; background: #28a745; color: white; text-decoration: none; border-radius: 8px; margin-top: 10px;">View All Reports</a>
+<div class="btn-container">
+<button type="submit" id="submitBtn"><i class="fas fa-paper-plane"></i> Generate Report</button>
+<button type="button" class="clear-btn" id="clearBtn"><i class="fas fa-trash"></i> Clear Form</button>
+<a href="/reports" class="btn-link"><i class="fas fa-eye"></i> View Reports</a>
+</div>
 
 </form>
 
+<div class="loading" id="loading"></div>
+
 <!-- Live Preview -->
 <div class="preview" id="livePreview">
-<h3>Live Preview</h3>
+<h3><i class="fas fa-eye"></i> Live Preview</h3>
 <p><b>Name:</b> <span id="previewName"></span></p>
 <p><b>Date:</b> <span id="previewDate"></span></p>
 <p><b>Project:</b> <span id="previewProject"></span></p>
@@ -219,7 +341,7 @@ Line 3: Tomorrow Plan" required></textarea>
 
 <div class="report">
 
-<h3>Generated Report</h3>
+<h3><i class="fas fa-check-circle"></i> Generated Report</h3>
 
 <p><b>Name:</b> {{report.name}}</p>
 
@@ -241,18 +363,9 @@ Line 3: Tomorrow Plan" required></textarea>
 
 <script>
 
-// Character Counter and Auto Expand
+// Elements
 const textarea = document.getElementById("statusBox");
-const counter = document.getElementById("charCount");
-
-textarea.addEventListener("input", function(){
-counter.textContent = textarea.value.length + " characters";
-this.style.height = "auto";
-this.style.height = this.scrollHeight + "px";
-updatePreview();
-});
-
-// Live Preview
+const progressFill = document.getElementById("progressFill");
 const nameInput = document.getElementById("nameInput");
 const dateInput = document.getElementById("dateInput");
 const projectInput = document.getElementById("projectInput");
@@ -263,49 +376,84 @@ const previewProject = document.getElementById("previewProject");
 const previewWork = document.getElementById("previewWork");
 const previewBlockers = document.getElementById("previewBlockers");
 const previewPlan = document.getElementById("previewPlan");
+const loading = document.getElementById("loading");
+const submitBtn = document.getElementById("submitBtn");
 
+// Update progress bar and preview
+textarea.addEventListener("input", function(){
+    updateProgress();
+    updatePreview();
+    this.style.height = "auto";
+    this.style.height = this.scrollHeight + "px";
+});
+
+// Update progress based on lines
+function updateProgress() {
+    const lines = textarea.value.split("\n").filter(line => line.trim() !== "");
+    const progress = Math.min((lines.length / 3) * 100, 100);
+    progressFill.style.width = progress + "%";
+}
+
+// Live Preview
 function updatePreview() {
-const name = nameInput.value;
-const date = dateInput.value;
-const project = projectInput.value;
-const status = textarea.value;
-const lines = status.split("\n");
+    const name = nameInput.value;
+    const date = dateInput.value;
+    const project = projectInput.value;
+    const status = textarea.value;
+    const lines = status.split("\n");
 
-previewName.textContent = name || "Not provided";
-previewDate.textContent = date || "Not provided";
-previewProject.textContent = project || "Not provided";
-previewWork.textContent = lines[0] || "Not provided";
-previewBlockers.textContent = lines[1] || "Not provided";
-previewPlan.textContent = lines[2] || "Not provided";
+    previewName.textContent = name || "Not provided";
+    previewDate.textContent = date || "Not provided";
+    previewProject.textContent = project || "Not provided";
+    previewWork.textContent = lines[0] || "Not provided";
+    previewBlockers.textContent = lines[1] || "Not provided";
+    previewPlan.textContent = lines[2] || "Not provided";
 
-if (name || date || project || status) {
-preview.style.display = "block";
-} else {
-preview.style.display = "none";
+    if (name || date || project || status) {
+        preview.style.display = "block";
+    } else {
+        preview.style.display = "none";
+    }
 }
-}
 
+// Event listeners
 nameInput.addEventListener("input", updatePreview);
 dateInput.addEventListener("input", updatePreview);
 projectInput.addEventListener("input", updatePreview);
 
 // Clear Form
 document.getElementById("clearBtn").addEventListener("click", function() {
-document.getElementById("statusForm").reset();
-counter.textContent = "0 characters";
-textarea.style.height = "90px";
-preview.style.display = "none";
+    document.getElementById("statusForm").reset();
+    textarea.style.height = "120px";
+    progressFill.style.width = "0%";
+    preview.style.display = "none";
 });
 
-// Form Validation
+// Form Submission
 document.getElementById("statusForm").addEventListener("submit", function(e) {
-const status = textarea.value;
-const lines = status.split("\n").filter(line => line.trim() !== "");
-if (lines.length < 3) {
-alert("Please provide at least 3 lines in the status: Work Done, Blockers, and Plan.");
-e.preventDefault();
-}
+    const status = textarea.value;
+    const lines = status.split("\n").filter(line => line.trim() !== "");
+    if (lines.length < 3) {
+        alert("Please provide at least 3 lines in the status: Work Done, Blockers, and Plan.");
+        e.preventDefault();
+        return;
+    }
+
+    // Show loading
+    loading.style.display = "block";
+    submitBtn.disabled = true;
+    submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Generating...';
+
+    // Simulate processing (in real app, this would be handled by the server)
+    setTimeout(() => {
+        loading.style.display = "none";
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Generate Report';
+    }, 2000);
 });
+
+// Initialize
+updateProgress();
 
 </script>
 
