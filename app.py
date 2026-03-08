@@ -79,7 +79,10 @@ def index():
 @app.route("/reports")
 def reports():
     all_reports = load_reports_from_excel()
-    return render_template("reports.html", reports=all_reports)
+    total_reports = len(all_reports)
+    reports_with_projects = len([r for r in all_reports if r.get('project', '').strip()])
+    contributors = len([r for r in all_reports if r.get('name', '').strip()])
+    return render_template("reports.html", reports=all_reports, total_reports=total_reports, reports_with_projects=reports_with_projects, contributors=contributors)
 
 
 @app.route("/download")
@@ -92,7 +95,3 @@ def download():
 
 if __name__ == "__main__":
     app.run(debug=True, use_reloader=False)
-
-
-if __name__ == "__main__":
-    app.run(debug=True)
