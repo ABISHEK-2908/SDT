@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, send_file
+from flask import Flask, render_template, request, send_file, redirect
 import csv
 import os
 import openpyxl
@@ -46,6 +46,20 @@ def load_reports_from_excel():
 
 @app.route("/", methods=["GET", "POST"])
 def index():
+    if request.method == "POST":
+        name = request.form["name"]
+        email = request.form["email"]
+        password = request.form["password"]
+        role = request.form["role"]
+        # For now, just print the data (in a real app, you'd authenticate)
+        print(f"Login attempt: Name={name}, Email={email}, Role={role}")
+        # Redirect to index after login
+        return redirect("/index")
+    return render_template("login.html")
+
+
+@app.route("/index", methods=["GET", "POST"])
+def dashboard():
 
     report = None
 
