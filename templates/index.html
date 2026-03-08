@@ -185,6 +185,9 @@ margin-bottom:5px;
 <label>Date</label>
 <input type="date" name="date" id="dateInput" required>
 
+<label>Project Name</label>
+<input type="text" name="project" id="projectInput" required>
+
 <label>Status (3 lines)</label>
 
 <textarea id="statusBox" name="status"
@@ -197,6 +200,8 @@ Line 3: Tomorrow Plan" required></textarea>
 <button type="submit">Generate Report</button>
 <button type="button" class="clear-btn" id="clearBtn">Clear Form</button>
 
+<a href="/reports" style="display: inline-block; padding: 12px; background: #28a745; color: white; text-decoration: none; border-radius: 8px; margin-top: 10px;">View All Reports</a>
+
 </form>
 
 <!-- Live Preview -->
@@ -204,6 +209,7 @@ Line 3: Tomorrow Plan" required></textarea>
 <h3>Live Preview</h3>
 <p><b>Name:</b> <span id="previewName"></span></p>
 <p><b>Date:</b> <span id="previewDate"></span></p>
+<p><b>Project:</b> <span id="previewProject"></span></p>
 <p><b>Work Done:</b> <span id="previewWork"></span></p>
 <p><b>Blockers:</b> <span id="previewBlockers"></span></p>
 <p><b>Plan:</b> <span id="previewPlan"></span></p>
@@ -218,6 +224,8 @@ Line 3: Tomorrow Plan" required></textarea>
 <p><b>Name:</b> {{report.name}}</p>
 
 <p><b>Date:</b> {{report.date}}</p>
+
+<p><b>Project:</b> {{report.project}}</p>
 
 <p><b>Work Done:</b> {{report.work_done}}</p>
 
@@ -247,9 +255,11 @@ updatePreview();
 // Live Preview
 const nameInput = document.getElementById("nameInput");
 const dateInput = document.getElementById("dateInput");
+const projectInput = document.getElementById("projectInput");
 const preview = document.getElementById("livePreview");
 const previewName = document.getElementById("previewName");
 const previewDate = document.getElementById("previewDate");
+const previewProject = document.getElementById("previewProject");
 const previewWork = document.getElementById("previewWork");
 const previewBlockers = document.getElementById("previewBlockers");
 const previewPlan = document.getElementById("previewPlan");
@@ -257,16 +267,18 @@ const previewPlan = document.getElementById("previewPlan");
 function updatePreview() {
 const name = nameInput.value;
 const date = dateInput.value;
+const project = projectInput.value;
 const status = textarea.value;
 const lines = status.split("\n");
 
 previewName.textContent = name || "Not provided";
 previewDate.textContent = date || "Not provided";
+previewProject.textContent = project || "Not provided";
 previewWork.textContent = lines[0] || "Not provided";
 previewBlockers.textContent = lines[1] || "Not provided";
 previewPlan.textContent = lines[2] || "Not provided";
 
-if (name || date || status) {
+if (name || date || project || status) {
 preview.style.display = "block";
 } else {
 preview.style.display = "none";
@@ -275,6 +287,7 @@ preview.style.display = "none";
 
 nameInput.addEventListener("input", updatePreview);
 dateInput.addEventListener("input", updatePreview);
+projectInput.addEventListener("input", updatePreview);
 
 // Clear Form
 document.getElementById("clearBtn").addEventListener("click", function() {
