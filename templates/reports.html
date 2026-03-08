@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>All Reports - Status Drafter Tool</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            background: linear-gradient(45deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="2" fill="rgba(255,255,255,0.1)"/></svg>') repeat;
+            animation: float 20s infinite linear;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            100% { transform: translateY(-100px); }
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 40px;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            color: #333;
+            position: relative;
+            z-index: 1;
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #4a5568;
+            font-weight: 700;
+            position: relative;
+        }
+
+        h2::after {
+            content: '';
+            display: block;
+            width: 60px;
+            height: 4px;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            margin: 10px auto;
+            border-radius: 2px;
+        }
+
+        .controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .search-box {
+            position: relative;
+            flex: 1;
+            max-width: 400px;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 12px 45px 12px 15px;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            font-size: 16px;
+            outline: none;
+            transition: border-color 0.3s ease;
+        }
+
+        .search-box input:focus {
+            border-color: #667eea;
+        }
+
+        .search-box i {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #667eea;
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn {
+            padding: 12px 20px;
+            border: none;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+        }
+
+        .btn-secondary {
+            background: #38a169;
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background: #2f855a;
+            transform: translateY(-2px);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        th, td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        th {
+            background: linear-gradient(135deg, #f7fafc, #edf2f7);
+            font-weight: 600;
+            color: #4a5568;
+            cursor: pointer;
+            position: relative;
+        }
+
+        th:hover {
+            background: linear-gradient(135deg, #edf2f7, #e2e8f0);
+        }
+
+        th.sort-asc::after {
+            content: ' ↑';
+            color: #667eea;
+        }
+
+        th.sort-desc::after {
+            content: ' ↓';
+            color: #667eea;
+        }
+
+        tbody tr {
+            transition: background-color 0.3s ease;
+        }
+
+        tbody tr:hover {
+            background: rgba(102, 126, 234, 0.05);
+        }
+
+        .no-reports {
+            text-align: center;
+            padding: 50px;
+            color: #718096;
+            font-size: 18px;
+        }
+
+        .stats {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+
+        .stat-card {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+            min-width: 150px;
+            margin: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .stat-card h3 {
+            font-size: 24px;
+            color: #667eea;
+            margin-bottom: 5px;
+        }
+
+        .stat-card p {
+            color: #4a5568;
+            font-weight: 600;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+            .controls {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .search-box {
+                max-width: none;
+            }
+            table {
+                font-size: 14px;
+            }
+            th, td {
+                padding: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2><i class="fas fa-chart-line"></i> All Daily Reports</h2>
+
+        {% if reports %}
+        <div class="stats">
+            <div class="stat-card">
+                <h3>{{ total_reports }}</h3>
+                <p>Total Reports</p>
+            </div>
+            <div class="stat-card">
+                <h3>{{ reports_with_projects }}</h3>
+                <p>Reports with Projects</p>
+            </div>
+            <div class="stat-card">
+                <h3>{{ contributors }}</h3>
+                <p>Contributors</p>
+            </div>
+        </div>
+        {% endif %}
+
+        <div class="controls">
+            <div class="search-box">
+                <input type="text" id="searchInput" placeholder="Search reports...">
+                <i class="fas fa-search"></i>
+            </div>
+            <div class="btn-group">
+                <a href="/" class="btn btn-primary"><i class="fas fa-plus"></i> New Report</a>
+                <a href="/download" class="btn btn-secondary"><i class="fas fa-download"></i> Download Excel</a>
+            </div>
+        </div>
+
+        {% if reports %}
+        <table id="reportsTable">
+            <thead>
+                <tr>
+                    <th data-sort="name">Name</th>
+                    <th data-sort="date">Date</th>
+                    <th data-sort="project">Project</th>
+                    <th>Work Done</th>
+                    <th>Blockers</th>
+                    <th>Plan</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for report in reports %}
+                <tr>
+                    <td>{{ report.name }}</td>
+                    <td>{{ report.date }}</td>
+                    <td>{{ report.project }}</td>
+                    <td>{{ report.work_done }}</td>
+                    <td>{{ report.blockers }}</td>
+                    <td>{{ report.plan }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <div class="no-reports">
+            <i class="fas fa-inbox fa-3x" style="color: #cbd5e0; margin-bottom: 20px;"></i>
+            <p>No reports found yet. <a href="/">Create your first report</a></p>
+        </div>
+        {% endif %}
+    </div>
+
+    <script>
+        // Search functionality
+        const searchInput = document.getElementById('searchInput');
+        const table = document.getElementById('reportsTable');
+        const tbody = table ? table.querySelector('tbody') : null;
+
+        searchInput.addEventListener('input', function() {
+            const searchTerm = this.value.toLowerCase();
+            const rows = tbody.querySelectorAll('tr');
+
+            rows.forEach(row => {
+                const text = row.textContent.toLowerCase();
+                row.style.display = text.includes(searchTerm) ? '' : 'none';
+            });
+        });
+
+        // Sorting functionality
+        if (table) {
+            const headers = table.querySelectorAll('th[data-sort]');
+            
+            headers.forEach(header => {
+                header.addEventListener('click', function() {
+                    const sortBy = this.dataset.sort;
+                    const rows = Array.from(tbody.querySelectorAll('tr'));
+                    
+                    // Remove previous sort indicators
+                    headers.forEach(h => h.classList.remove('sort-asc', 'sort-desc'));
+                    
+                    // Determine sort direction
+                    const isAsc = this.classList.contains('sort-asc');
+                    this.classList.toggle('sort-asc', !isAsc);
+                    this.classList.toggle('sort-desc', isAsc);
+                    
+                    // Sort rows
+                    rows.sort((a, b) => {
+                        const aVal = a.cells[Array.from(headers).indexOf(this)].textContent.trim();
+                        const bVal = b.cells[Array.from(headers).indexOf(this)].textContent.trim();
+                        
+                        if (sortBy === 'date') {
+                            return isAsc ? new Date(aVal) - new Date(bVal) : new Date(bVal) - new Date(aVal);
+                        } else {
+                            return isAsc ? aVal.localeCompare(bVal) : bVal.localeCompare(aVal);
+                        }
+                    });
+                    
+                    // Re-append sorted rows
+                    rows.forEach(row => tbody.appendChild(row));
+                });
+            });
+        }
+    </script>
+</body>
+</html>
