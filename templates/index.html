@@ -185,6 +185,9 @@ margin-bottom:5px;
 <label>Date</label>
 <input type="date" name="date" id="dateInput" required>
 
+<label>Project Name</label>
+<input type="text" name="project" id="projectInput" required>
+
 <label>Status (3 lines)</label>
 
 <textarea id="statusBox" name="status"
@@ -218,6 +221,8 @@ Line 3: Tomorrow Plan" required></textarea>
 <p><b>Name:</b> {{report.name}}</p>
 
 <p><b>Date:</b> {{report.date}}</p>
+
+<p><b>Project:</b> {{report.project}}</p>
 
 <p><b>Work Done:</b> {{report.work_done}}</p>
 
