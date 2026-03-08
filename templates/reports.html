@@ -250,15 +250,15 @@
         {% if reports %}
         <div class="stats">
             <div class="stat-card">
-                <h3>{{ reports|length }}</h3>
+                <h3>{{ total_reports }}</h3>
                 <p>Total Reports</p>
             </div>
             <div class="stat-card">
-                <h3>{{ reports|selectattr('project', '!=', '')|list|length }}</h3>
+                <h3>{{ reports_with_projects }}</h3>
                 <p>Reports with Projects</p>
             </div>
             <div class="stat-card">
-                <h3>{{ reports|selectattr('name', '!=', '')|list|length }}</h3>
+                <h3>{{ contributors }}</h3>
                 <p>Contributors</p>
             </div>
         </div>
